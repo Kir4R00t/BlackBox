@@ -28,7 +28,7 @@ void display_controls() {
         << "#   tego etapu gry);\n"
         << "# H – Help/Pomoc – pokazuje na chwilê umieszczenie atomów na planszy\n"
         << "=============================\n"
-        << "Wciœnij Enter aby kontynuowaæ...";
+        << "Wciœnij Enter aby wróciæ do menu ...";
     cin.get();
     system("cls");
 }
@@ -79,6 +79,16 @@ void draw_board(unsigned size) {
     cout << "Wciœnij Enter aby wróciæ do menu..." << endl;
     cin.get();
     system("cls");
+}
+
+// fill board with atoms
+void fill_board(unsigned atoms) {
+	// 5x5 - 3 atomy
+	// 8x8 - 5 atomów
+	// 10x10 - 8 atomów
+	// w customowej mapie --> user input
+
+
 }
 
 // displaying board choice menu
