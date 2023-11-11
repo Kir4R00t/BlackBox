@@ -13,6 +13,8 @@
 
 using namespace std;
 
+// constexpr char board[40][40] = { 0 };
+
 // displaying app controls
 void display_controls() {
     cout << "===== Obs³uga programu =====:\n"
@@ -33,62 +35,137 @@ void display_controls() {
     system("cls");
 }
 
-// drawing game board
-void draw_board(unsigned size) {
-    // 5x5 - 3 atomy
-    // 8x8 - 5 atomów
-    // 10x10 - 8 atomów
-    // opcja zrobienia customowej mapy 
-    // np. rozmiar AxA + X atomów
-    
-    if (size < 5 || size > 20) {
-        cout << "Nieprawid³owy rozmiar planszy [5-20]!" << endl;
-        return;
-    }
+// drawing board
+void draw_board(int cursorRow, int cursorColumn, int gridSize, char board[][40]) {
+    system("cls"); // Clear the console screen (Windows specific)
+
+    int size = gridSize + 2; // Total size includes the corner squares
 
     cout << endl;
-    cout << "    ";
-    for (char label = 'A'; label < 'A' + size; ++label) {
-        cout << "|  " << label << "  ";
-    }
-    cout << '|' << endl;
-    cout << "    "; 
-    for (unsigned i = 0; i < size; i++) {
-        cout << "------";
-    }
-    cout << '-' << endl;
 
-    for (unsigned i = 0; i < size; i++) {
-        cout << setw(2) << i + 1 << "  ";
-        for (unsigned j = 0; j < size; j++)
-            cout << "|     "; 
-        cout << '|' << setw(2) << i + 1 << endl;
-        cout << "    ";
-        for (unsigned j = 0; j < size; j++)
-            cout << "------";
-        cout << '-' << endl;
+    // Display top border
+    cout << "   ";
+    for (int i = 1; i <= size; i++) {
+        cout << "+-----";
     }
+    cout << '+' << endl;
 
-    cout << "    ";
-    for (char label = 'A'; label < 'A' + size; ++label) {
-        cout << "|  " << label << "  ";
+    for (int i = 1; i <= size; i++) {
+        // Display side label
+        cout << "   |";
+
+        for (int j = 1; j <= size; j++) {
+            if ((i == 1 && j == 1) || (i == 1 && j == size) || (i == size && j == 1) || (i == size && j == size)) {
+                cout << " XXX |";
+            }
+            else if (i == 1 || i == size) {
+                cout << "  " << setw(2) << j - 1 << " |";
+            }
+            else if (j == 1 || j == size) {
+                cout << setw(4) << i + size - 3 << " |";
+            }
+            else if (i == cursorRow && j == cursorColumn) {
+                cout << " ### |";
+            }
+            else {
+                cout << " ";
+                if (board[i][j] == 'O') {
+                    cout << setw(2) << 'O' << ' ';
+                }
+                else if (board[i][j] == 'L') {
+                    cout << setw(2) << 'L' << ' ';
+                }
+                else {
+                    cout << "   ";
+                }
+                cout << " |";
+            }
+        }
+
+        cout << endl;
+
+        // Display side border
+        if (i < size) {
+            cout << "   +";
+            for (int j = 1; j <= size; j++) {
+                cout << "-----+";
+            }
+            cout << endl;
+        }
     }
-    cout << '|' << endl;
-
-    cout << endl;
-    cout << "Wciœnij Enter aby wróciæ do menu..." << endl;
-    cin.get();
-    system("cls");
+    // bottom border
+    cout << "   ";
+    for (int i = 1; i <= size; i++) {
+        cout << "+-----";
+    }
+    cout << '+' << endl;
 }
 
 // fill board with atoms
-void fill_board(unsigned atoms) {
-	// 5x5 - 3 atomy
-	// 8x8 - 5 atomów
-	// 10x10 - 8 atomów
-	// w customowej mapie --> user input
+void placeAtoms(char board[][40], int gridSize, int numAtoms) {
+    for (int i = 0; i < numAtoms; i++) {
+        int x = 1 + rand() % gridSize;
+        int y = 1 + rand() % gridSize;
 
+        board[x][y] = 'O';
+    }
+}
 
+// priunt out cursor postion
+void printCursorStatus(int cursorRow, int cursorColumn, char board[][40]) {
+    cout << "Current cursor coordinates - (" << cursorRow << ", " << cursorColumn << ") " << endl;
+
+    if (board[cursorRow][cursorColumn] == 'O') {
+        cout << "Cursor is on an atom" << endl;
+    }
+    else if (board[cursorRow][cursorColumn] == 'L') {
+        cout << "Cursor is on a 'L'" << endl;
+    }
+    else {
+        cout << "Cursor is on an empty tile'" << endl;
+    }
+}
+
+// controlling user input
+void controls(char input, int& cursorRow, int& cursorColumn, char board[][40], int gridSize) {
+    switch (input) {
+    case 'w':
+        if (cursorRow > 1) {
+            cursorRow--;
+        }
+        break;
+    case 's':
+        if (cursorRow < gridSize + 2) {
+            cursorRow++;
+        }
+        break;
+    case 'a':
+        if (cursorColumn > 1) {
+            cursorColumn--;
+        }
+        break;
+    case 'd':
+        if (cursorColumn < gridSize + 2) {
+            cursorColumn++;
+        }
+        break;
+    case 'o':
+        board[cursorRow][cursorColumn] = 'O';
+        break;
+    case 'p':
+        // Place 'L' at the current cursor position
+        board[cursorRow][cursorColumn] = 'L';
+        break;
+    case 'i':
+        board[cursorRow][cursorColumn] = ' ';
+        break;
+    case 'q':
+        // Exit the program
+        exit(0);
+    default:
+        // Handle other keys if needed
+        break;
+    }
 }
 
 // displaying board choice menu
@@ -106,20 +183,23 @@ void board_choice() {
 
     switch (choice) {
     case 1:
-        draw_board(5);
+        game(5, 3);
         break;
     case 2:
-        draw_board(8);
+        game(8, 5);
         break;
     case 3:
-        draw_board(10);
+        game(10, 8);
         break;
     case 4:
+        int size, atoms;
         cout << "Podaj rozmiar planszy:" << endl;
-        cin >> choice;
+        cin >> size;
+        cout << "Podaj liczbê atomów:" << endl;
+        cin >> atoms;
+        game(size, atoms);
         cin.ignore();
         system("cls");
-        draw_board(choice);
         // iloœæ atomów
         break;
     default:
@@ -178,7 +258,7 @@ void controls() {
         break;
     case 'q':
     case 'Q':
-        main_menu();
+        //main_menu();
         break;
     case 'u':
     case 'U':
@@ -209,6 +289,28 @@ void controls() {
     }
 }
 
+// game function
+void game(int gridSize, int numAtoms) {
+    int cursorRow = 1;    // Initial cursor row position
+    int cursorColumn = 1; // Initial cursor column position
+
+    char board[40][40] = { 0 }; // Initialize the board with zeros
+    
+    placeAtoms(board, gridSize, numAtoms);
+
+    while (true) {
+        draw_board(cursorRow, cursorColumn, gridSize, board);
+        cout << endl;
+
+        printCursorStatus(cursorRow, cursorColumn, board);
+
+        char input = _getch(); // Use _getch() for simplicity (Windows specific)
+
+        controls(input, cursorRow, cursorColumn, board, gridSize);
+    }
+
+}
+
 // main function
 int main() {
     // allow polish symbols
@@ -224,7 +326,7 @@ int main() {
             << "\n\nPrzemys³aw Sadowski | 197696 | EiT1\n\n";
 
         main_menu();
-    } while (true);
+    } while (1);
 	
 
 	return 0;
