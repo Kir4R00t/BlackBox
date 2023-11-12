@@ -9,8 +9,7 @@
 //
 //  To Fix:
 //  - Naprawiæ to ¿e atomy respi¹ siê na label-ach
-//  -  
-
+//  - Naprawiæ funkcjê losujac¹ --> srand
 
 #include <iostream>
 #include <locale.h>
