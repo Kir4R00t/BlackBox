@@ -13,7 +13,9 @@
 
 using namespace std;
 
-// constexpr char board[40][40] = { 0 };
+// function prototypes
+void game(int gridSize, int numAtoms);
+void main_menu();
 
 // displaying app controls
 void display_controls() {
@@ -112,7 +114,7 @@ void placeAtoms(char board[][40], int gridSize, int numAtoms) {
 }
 
 // priunt out cursor postion
-void printCursorStatus(int cursorRow, int cursorColumn, char board[][40]) {
+void CursorStatus(int cursorRow, int cursorColumn, char board[][40]) {
     cout << "Current cursor coordinates - (" << cursorRow << ", " << cursorColumn << ") " << endl;
 
     if (board[cursorRow][cursorColumn] == 'O') {
@@ -122,7 +124,7 @@ void printCursorStatus(int cursorRow, int cursorColumn, char board[][40]) {
         cout << "Cursor is on a 'L'" << endl;
     }
     else {
-        cout << "Cursor is on an empty tile'" << endl;
+        cout << "Cursor is on an empty tile" << endl;
     }
 }
 
@@ -160,8 +162,9 @@ void controls(char input, int& cursorRow, int& cursorColumn, char board[][40], i
         board[cursorRow][cursorColumn] = ' ';
         break;
     case 'q':
-        // Exit the program
-        exit(0);
+        system("cls");
+        main_menu();
+        break;
     default:
         // Handle other keys if needed
         break;
@@ -211,6 +214,14 @@ void board_choice() {
 
 // displaying main menu
 void main_menu() {
+    // displaying figel art
+    cout << "    ____  __           __   ____"
+        << "\n   / __ )/ /___ ______/ /__/ __ )____  _  __"
+        << "\n  / __  / / __ `/ ___/ //_/ __  / __ \\| |/_/"
+        << "\n / /_/ / / /_/ / /__/ ,< / /_/ / /_/ />  <"
+        << "\n/_____/_/\\__,_/\\___/_/|_/_____/\\____/_/|_|"
+        << "\n\nPrzemys³aw Sadowski | 197696 | EiT1\n\n";
+    
     unsigned choice;
     cout << "===== MENU =====" << endl;
     cout << "1. Wybór planszy" << endl;
@@ -239,6 +250,42 @@ void main_menu() {
     }
 }
 
+// game function
+void game(int gridSize, int numAtoms) {
+    int cursorRow = 1;    // Initial cursor row position
+    int cursorColumn = 1; // Initial cursor column position
+
+    char board[40][40] = { 0 }; // Initialize the board with zeros
+    
+    placeAtoms(board, gridSize, numAtoms);
+
+    while (true) {
+        draw_board(cursorRow, cursorColumn, gridSize, board);
+        cout << endl;
+
+        CursorStatus(cursorRow, cursorColumn, board);
+
+        char input = _getch(); // Use _getch() for simplicity (Windows specific)
+
+        controls(input, cursorRow, cursorColumn, board, gridSize);
+    }
+
+}
+
+// main function
+int main() {
+    // allow polish symbols
+    setlocale(LC_CTYPE, "Polish");
+
+    do {
+        main_menu();
+    } while (1);
+	
+
+	return 0;
+}
+
+/*
 // app controls
 void controls() {
     char action;
@@ -289,45 +336,4 @@ void controls() {
     }
 }
 
-// game function
-void game(int gridSize, int numAtoms) {
-    int cursorRow = 1;    // Initial cursor row position
-    int cursorColumn = 1; // Initial cursor column position
-
-    char board[40][40] = { 0 }; // Initialize the board with zeros
-    
-    placeAtoms(board, gridSize, numAtoms);
-
-    while (true) {
-        draw_board(cursorRow, cursorColumn, gridSize, board);
-        cout << endl;
-
-        printCursorStatus(cursorRow, cursorColumn, board);
-
-        char input = _getch(); // Use _getch() for simplicity (Windows specific)
-
-        controls(input, cursorRow, cursorColumn, board, gridSize);
-    }
-
-}
-
-// main function
-int main() {
-    // allow polish symbols
-    setlocale(LC_CTYPE, "Polish");
-
-    do {
-        // displaying figel art
-        cout << "    ____  __           __   ____"
-            << "\n   / __ )/ /___ ______/ /__/ __ )____  _  __"
-            << "\n  / __  / / __ `/ ___/ //_/ __  / __ \\| |/_/"
-            << "\n / /_/ / / /_/ / /__/ ,< / /_/ / /_/ />  <"
-            << "\n/_____/_/\\__,_/\\___/_/|_/_____/\\____/_/|_|"
-            << "\n\nPrzemys³aw Sadowski | 197696 | EiT1\n\n";
-
-        main_menu();
-    } while (1);
-	
-
-	return 0;
-}
+*/
