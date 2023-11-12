@@ -35,6 +35,7 @@ void display_controls() {
         << "Wciœnij Enter aby wróciæ do menu ...";
     cin.get();
     system("cls");
+    main_menu();
 }
 
 // drawing board
@@ -165,6 +166,10 @@ void controls(char input, int& cursorRow, int& cursorColumn, char board[][40], i
         system("cls");
         main_menu();
         break;
+    case 'h':
+        system("cls");
+        display_controls();
+        break;
     default:
         // Handle other keys if needed
         break;
@@ -252,10 +257,12 @@ void main_menu() {
 
 // game function
 void game(int gridSize, int numAtoms) {
-    int cursorRow = 1;    // Initial cursor row position
-    int cursorColumn = 1; // Initial cursor column position
+    // Inital cursor position
+    int cursorRow = 1;   
+    int cursorColumn = 1;
 
-    char board[40][40] = { 0 }; // Initialize the board with zeros
+    // Initialize game board with zeros
+    char board[40][40] = { 0 }; 
     
     placeAtoms(board, gridSize, numAtoms);
 
@@ -284,56 +291,3 @@ int main() {
 
 	return 0;
 }
-
-/*
-// app controls
-void controls() {
-    char action;
-    cin >> action;
-    switch (action) {
-    case 'w':
-        // Move up
-        break;
-    case 's':
-        // Move down
-        break;
-    case 'a':
-        // Move left
-        break;
-    case 'd':
-        // Move right
-        break;
-    case 'q':
-    case 'Q':
-        //main_menu();
-        break;
-    case 'u':
-    case 'U':
-        // Undo (cofnij ruch)
-        break;
-    case 'r':
-    case 'R':
-        // Redo (powtórz cofniêty ruch)
-        break;
-    case ' ':
-        // Oddanie strza³u (gdy kursor jest na dowolnej œcianie)
-        break;
-    case 'o':
-        // Na planszy umo¿liwia zaznaczenie przypuszczalnego po³o¿enia atomu
-        break;
-    case 'k':
-        // Zakoñczenie rozgrywki i wyœwietlenie rozwi¹zania
-        break;
-    case 'p':
-        // Wyœwietlenie rozwi¹zania (przerywa etap gry, brak mo¿liwoœci kontynuowania tego etapu gry)
-        break;
-    case 'H':
-        // Help/Pomoc – pokazuje na chwilê umieszczenie atomów na planszy
-        break;
-    default:
-        // Invalid action
-        break;
-    }
-}
-
-*/
