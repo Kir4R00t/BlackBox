@@ -5,6 +5,12 @@
 //  /_____/_/\__,_/\___/_/|_/_____/\____/_/|_|  
 //
 // Przemys³aw Sadowski | 197696 | EiT1                                              
+//
+//
+//  To Fix:
+//  - Naprawiæ to ¿e atomy respi¹ siê na label-ach
+//  -  
+
 
 #include <iostream>
 #include <locale.h>
