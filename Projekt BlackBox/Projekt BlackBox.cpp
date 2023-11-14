@@ -4,12 +4,12 @@
 //   / /_/ / / /_/ / /__/ ,< / /_/ / /_/ />  <  
 //  /_____/_/\__,_/\___/_/|_/_____/\____/_/|_|  
 //
-// Przemys³aw Sadowski | 197696 | EiT1                                              
+// PrzemysÅ‚aw Sadowski | 197696 | EiT1                                              
 //
 //
 //  To Fix:
-//  - Naprawiæ to ¿e atomy respi¹ siê na label-ach
-//  - Naprawiæ funkcjê losujac¹ --> srand
+//  - NaprawiÄ‡ to Å¼e atomy respiÄ… siÄ™ na label-ach
+//  - NaprawiÄ‡ funkcjÄ™ losujacÄ… --> srand
 
 #include <iostream>
 #include <locale.h>
@@ -24,20 +24,20 @@ void main_menu();
 
 // displaying app controls
 void display_controls() {
-    cout << "===== Obs³uga programu =====:\n"
+    cout << "===== ObsÅ‚uga programu =====:\n"
         << "# (w,s,a,d) - poruszanie sie\n"
-        << "# (q,Q) - wyjœcie do menu\n"
-        << "# u, U – undo (cofnij ruch);\n"
-        << "# r, R – redo (powtórz cofniêty ruch);\n"
-        << "# spacja oddanie strza³u (gdy kursor jest na dowolnej œcianie);\n"
-        << "# o - na planszy umo¿liwia zaznaczenie przypuszczalnego po³o¿enia atomu;\n"
-        << "# k – koñczy rozgrywkê i umo¿liwia wyœwietlenie rozwi¹zania i liczby uzyskanych punktów\n"
-        << "#   (poprawnie znalezionych atomów);\n"
-        << "# p – umo¿liwia wyœwietlenie rozwi¹zania (przerywa etap gry, brak mo¿liwoœci kontynuowania\n"
+        << "# (q,Q) - wyjÅ›cie do menu\n"
+        << "# u, U â€“ undo (cofnij ruch);\n"
+        << "# r, R â€“ redo (powtÃ³rz cofniÄ™ty ruch);\n"
+        << "# spacja oddanie strzaÅ‚u (gdy kursor jest na dowolnej Å›cianie);\n"
+        << "# o - na planszy umoÅ¼liwia zaznaczenie przypuszczalnego poÅ‚oÅ¼enia atomu;\n"
+        << "# k â€“ koÅ„czy rozgrywkÄ™ i umoÅ¼liwia wyÅ›wietlenie rozwiÄ…zania i liczby uzyskanych punktÃ³w\n"
+        << "#   (poprawnie znalezionych atomÃ³w);\n"
+        << "# p â€“ umoÅ¼liwia wyÅ›wietlenie rozwiÄ…zania (przerywa etap gry, brak moÅ¼liwoÅ›ci kontynuowania\n"
         << "#   tego etapu gry);\n"
-        << "# H – Help/Pomoc – pokazuje na chwilê umieszczenie atomów na planszy\n"
+        << "# H â€“ Help/Pomoc â€“ pokazuje na chwilÄ™ umieszczenie atomÃ³w na planszy\n"
         << "=============================\n"
-        << "Wciœnij Enter aby wróciæ do menu ...";
+        << "WciÅ›nij Enter aby wrÃ³ciÄ‡ do menu ...";
     cin.get();
     system("cls");
     main_menu();
@@ -183,7 +183,7 @@ void controls(char input, int& cursorRow, int& cursorColumn, char board[][40], i
 
 // displaying board choice menu
 void board_choice() {
-    cout << "Wybór planszy:" << endl;
+    cout << "WybÃ³r planszy:" << endl;
     cout << "1. 5x5" << endl;
     cout << "2. 8x8" << endl;
     cout << "3. 10x10" << endl;
@@ -208,12 +208,12 @@ void board_choice() {
         int size, atoms;
         cout << "Podaj rozmiar planszy:" << endl;
         cin >> size;
-        cout << "Podaj liczbê atomów:" << endl;
+        cout << "Podaj liczbÄ™ atomÃ³w:" << endl;
         cin >> atoms;
         game(size, atoms);
         cin.ignore();
         system("cls");
-        // iloœæ atomów
+        // iloÅ›Ä‡ atomÃ³w
         break;
     default:
         cout << "Nie ma takiej opcji!" << endl;
@@ -230,13 +230,13 @@ void main_menu() {
         << "\n  / __  / / __ `/ ___/ //_/ __  / __ \\| |/_/"
         << "\n / /_/ / / /_/ / /__/ ,< / /_/ / /_/ />  <"
         << "\n/_____/_/\\__,_/\\___/_/|_/_____/\\____/_/|_|"
-        << "\n\nPrzemys³aw Sadowski | 197696 | EiT1\n\n";
+        << "\n\nPrzemysÅ‚aw Sadowski | 197696 | EiT1\n\n";
     
     unsigned choice;
     cout << "===== MENU =====" << endl;
-    cout << "1. Wybór planszy" << endl;
+    cout << "1. WybÃ³r planszy" << endl;
     cout << "2. Sterowanie" << endl;
-    cout << "3. Wyjœcie z programu" << endl;
+    cout << "3. WyjÅ›cie z programu" << endl;
     cout << "Wybierz opcje: ";
     cin >> choice;
     cin.ignore();
