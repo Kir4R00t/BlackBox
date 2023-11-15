@@ -1,6 +1,6 @@
 ===== Funkcjonalnoœæ =====: 
 Done # wyœwietliæ jakiœ fajny ASCII art 
-Done # plansze 5x5, 8x8 ,10x10 (liczba atomów rosnie od 3 do 8)
+Done # plansze 5x5, 8x8 ,10x10 (liczba atomów --> 3, 5, 8)
 # atomy rozmieszczane w sposób losowy (+ wyœwietlenie liczby atomów)
 # strza³y powinny byæ numerowane (tym samym numerem wylot promienia)
 # oznaczenie trafienia atomu (H) i odbicia (R)
