@@ -116,21 +116,21 @@ void placeAtoms(char board[][40], int gridSize, int numAtoms) {
         do {
             x = 1 + rand() % gridSize;
             y = 1 + rand() % gridSize;
-        } while (x == 1 || y == 1); // Repeat until a valid position is found
+        } while (x == 1 || y == 1); 
 
         board[x][y] = 'O';
     }
 }
 
-// priunt out cursor postion
+// print out cursor postion
+// TODO: zrobić jakąś ładną tabelke
 void CursorStatus(int cursorRow, int cursorColumn, char board[][40]) {
+    cout << endl;
     cout << "Current cursor coordinates - (" << cursorRow << ", " << cursorColumn << ") " << endl;
 
+    // TODO: remove in final ver 
     if (board[cursorRow][cursorColumn] == 'O') {
         cout << "Cursor is on an atom" << endl;
-    }
-    else if (board[cursorRow][cursorColumn] == 'L') {
-        cout << "Cursor is on a 'L'" << endl;
     }
     else {
         cout << "Cursor is on an empty tile" << endl;
@@ -160,16 +160,6 @@ void controls(char input, int& cursorRow, int& cursorColumn, char board[][40], i
             cursorColumn++;
         }
         break;
-    case 'o':
-        board[cursorRow][cursorColumn] = 'O';
-        break;
-    case 'p':
-        // Place 'L' at the current cursor position
-        board[cursorRow][cursorColumn] = 'L';
-        break;
-    case 'i':
-        board[cursorRow][cursorColumn] = ' ';
-        break;
     case 'q':
         system("cls");
         main_menu();
@@ -179,7 +169,6 @@ void controls(char input, int& cursorRow, int& cursorColumn, char board[][40], i
         display_controls();
         break;
     default:
-        // Handle other keys if needed
         break;
     }
 }
@@ -216,7 +205,6 @@ void board_choice() {
         game(size, atoms);
         cin.ignore();
         system("cls");
-        // ilość atomów
         break;
     default:
         cout << "Nie ma takiej opcji!" << endl;
@@ -269,7 +257,6 @@ void game(int gridSize, int numAtoms) {
     int cursorRow = 1;   
     int cursorColumn = 1;
 
-    // Initialize game board with zeros
     char board[40][40] = { 0 }; 
     
     placeAtoms(board, gridSize, numAtoms);
@@ -280,10 +267,37 @@ void game(int gridSize, int numAtoms) {
 
         CursorStatus(cursorRow, cursorColumn, board);
 
-        char input = _getch(); // Use _getch() for simplicity (Windows specific)
+        char input = _getch(); 
         controls(input, cursorRow, cursorColumn, board, gridSize);
     }
 
+}
+
+// saving game
+void save() {
+    // ...
+}
+
+// loading game (from .txt file ?)
+void load_save() {
+    // ...
+}
+
+// undo move & redo move --> up to 5 moves
+void undo() {
+    // ...
+}
+
+// laser logic
+void laser(int& cursorRow, int& cursorColumn, char board, int gridSize) {
+   // LASER LOGIC
+   /*
+   1. laser można wystrzelić tylko z krawędzi planszy
+   2. laser leci w kierunku przeciwnym do krawędzi z której został wystrzelony
+   3. laser odbija się od "krawędzi" atomu a jak trafi na atom to sie zatrzymuje
+   4. pokazać tor lotu lasera (wymazać > narysować nowy przy kolejnym strzale)
+   5. pod pozycją kursora wyświetlać skąd laser wystartował i w jakim miejscu skończył
+   */
 }
 
 // main function
