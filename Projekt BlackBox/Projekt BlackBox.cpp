@@ -112,8 +112,11 @@ void draw_board(int cursorRow, int cursorColumn, int gridSize, char board[][40])
 // fill board with atoms
 void placeAtoms(char board[][40], int gridSize, int numAtoms) {
     for (int i = 0; i < numAtoms; i++) {
-        int x = 1 + rand() % gridSize;
-        int y = 1 + rand() % gridSize;
+        int x, y;
+        do {
+            x = 1 + rand() % gridSize;
+            y = 1 + rand() % gridSize;
+        } while (x == 1 || y == 1); // Repeat until a valid position is found
 
         board[x][y] = 'O';
     }
@@ -272,13 +275,12 @@ void game(int gridSize, int numAtoms) {
     placeAtoms(board, gridSize, numAtoms);
 
     while (true) {
+
         draw_board(cursorRow, cursorColumn, gridSize, board);
-        cout << endl;
 
         CursorStatus(cursorRow, cursorColumn, board);
 
         char input = _getch(); // Use _getch() for simplicity (Windows specific)
-
         controls(input, cursorRow, cursorColumn, board, gridSize);
     }
 
@@ -288,6 +290,7 @@ void game(int gridSize, int numAtoms) {
 int main() {
     // allow polish symbols
     setlocale(LC_CTYPE, "Polish");
+    srand(static_cast<unsigned>(time(nullptr)));
 
     do {
         main_menu();
