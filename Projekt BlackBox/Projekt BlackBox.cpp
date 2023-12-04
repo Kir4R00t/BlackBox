@@ -241,7 +241,6 @@ void main_menu() {
     default:
         cout << "!!! Nie ma takiej opcji !!!" << endl;
         cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         break;
     }
 }
