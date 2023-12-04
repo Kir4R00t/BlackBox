@@ -12,9 +12,8 @@
 //  - Naprawić funkcję losujacą --> srand
 
 #include <iostream>
-#include <locale.h>
 #include <iomanip>
-#include <conio.h>
+
 
 using namespace std;
 
@@ -39,13 +38,12 @@ void display_controls() {
         << "=============================\n"
         << "Wciśnij Enter aby wrócić do menu ...";
     cin.get();
-    system("cls");
     main_menu();
 }
 
 // drawing board
 void draw_board(int cursorRow, int cursorColumn, int gridSize, char board[][40]) {
-    system("cls"); // Clear the console screen (Windows specific)
+    
 
     int size = gridSize + 2; // Total size includes the corner squares
 
@@ -161,11 +159,10 @@ void controls(char input, int& cursorRow, int& cursorColumn, char board[][40], i
         }
         break;
     case 'q':
-        system("cls");
+        
         main_menu();
         break;
     case 'h':
-        system("cls");
         display_controls();
         break;
     default:
@@ -184,7 +181,6 @@ void board_choice() {
     cout << "Wybierz opcje: ";
     cin >> choice;
     cin.ignore();
-    system("cls");
 
     switch (choice) {
     case 1:
@@ -204,7 +200,7 @@ void board_choice() {
         cin >> atoms;
         game(size, atoms);
         cin.ignore();
-        system("cls");
+        
         break;
     default:
         cout << "Nie ma takiej opcji!" << endl;
@@ -231,7 +227,6 @@ void main_menu() {
     cout << "Wybierz opcje: ";
     cin >> choice;
     cin.ignore();
-    system("cls");
 
     switch (choice) {
     case 1:
@@ -267,7 +262,9 @@ void game(int gridSize, int numAtoms) {
 
         CursorStatus(cursorRow, cursorColumn, board);
 
-        char input = _getch(); 
+        char input;
+        cin >> input;
+
         controls(input, cursorRow, cursorColumn, board, gridSize);
     }
 
