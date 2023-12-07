@@ -1,4 +1,4 @@
-//      ____  __           __   ____            
+// ____  __           __   ____
 //     / __ )/ /___ ______/ /__/ __ )____  _  __
 //    / __  / / __ `/ ___/ //_/ __  / __ \| |/_/
 //   / /_/ / / /_/ / /__/ ,< / /_/ / /_/ />  <  
@@ -8,14 +8,18 @@
 //
 //
 //  To Fix:
-//  - Naprawić to że atomy respią się na label-ach
-//  - Naprawić funkcję losujacą --> srand
+//  - undo/redo
+//  - laser logic
+//  - polskie znaki
+//  - delet comments
+//  - idk obszar pedał dzieci jebał
 
 #include <iostream>
 #include <iomanip>
 
-
 using namespace std;
+
+constexpr unsigned MAX_SIZE = 40;
 
 // function prototypes
 void game(int gridSize, int numAtoms);
@@ -42,10 +46,9 @@ void display_controls() {
 }
 
 // drawing board
-void draw_board(int cursorRow, int cursorColumn, int gridSize, char board[][40]) {
-    
+void draw_board(int cursorRow, int cursorColumn, int gridSize, char board[MAX_SIZE][MAX_SIZE], bool show_atoms) {
 
-    int size = gridSize + 2; // Total size includes the corner squares
+    unsigned size = gridSize + 2; // Total size includes the corner squares
 
     cout << endl;
 
@@ -60,30 +63,28 @@ void draw_board(int cursorRow, int cursorColumn, int gridSize, char board[][40])
         // Display side label
         cout << "   |";
 
+        char znaczek = 178;
         for (int j = 1; j <= size; j++) {
-            if ((i == 1 && j == 1) || (i == 1 && j == size) || (i == size && j == 1) || (i == size && j == size)) {
-                cout << " XXX |";
-            }
-            else if (i == 1 || i == size) {
-                cout << "  " << setw(2) << j - 1 << " |";
-            }
-            else if (j == 1 || j == size) {
-                cout << setw(4) << i + size - 3 << " |";
-            }
-            else if (i == cursorRow && j == cursorColumn) {
-                cout << " ### |";
-            }
+            if ((i == 1 && j == 1) || (i == 1 && j == size) || (i == size && j == 1) || (i == size && j == size)) cout << " XXX |";
+
+            else if (i == 1 || i == size) cout << setw(2) << znaczek << znaczek << znaczek << " |";
+
+            else if (j == 1 || j == size) cout << setw(2) << znaczek << znaczek << znaczek << " |";
+
+            else if (i == cursorRow && j == cursorColumn) cout << " ### |";
+
             else {
                 cout << " ";
+                
                 if (board[i][j] == 'O') {
-                    cout << setw(2) << 'O' << ' ';
+                    if (show_atoms == false) cout << "   ";
+                    else cout << setw(2) << 'O' << ' ';
                 }
-                else if (board[i][j] == 'L') {
-                    cout << setw(2) << 'L' << ' ';
-                }
-                else {
-                    cout << "   ";
-                }
+
+                else if (board[i][j] == 'X') cout << setw(2) << 'X' << ' ';
+
+                else cout << "   ";
+       
                 cout << " |";
             }
         }
@@ -108,35 +109,69 @@ void draw_board(int cursorRow, int cursorColumn, int gridSize, char board[][40])
 }
 
 // fill board with atoms
-void placeAtoms(char board[][40], int gridSize, int numAtoms) {
+void placeAtoms(char board[MAX_SIZE][MAX_SIZE], int gridSize, int numAtoms) {
     for (int i = 0; i < numAtoms; i++) {
         int x, y;
         do {
             x = 1 + rand() % gridSize;
             y = 1 + rand() % gridSize;
-        } while (x == 1 || y == 1); 
+        } while (x == 1 || y == 1);
 
         board[x][y] = 'O';
     }
 }
 
-// print out cursor postion
-// TODO: zrobić jakąś ładną tabelke
-void CursorStatus(int cursorRow, int cursorColumn, char board[][40]) {
-    cout << endl;
-    cout << "Current cursor coordinates - (" << cursorRow << ", " << cursorColumn << ") " << endl;
+// show atoms on board
+void hint(int& cursorRow, int& cursorColumn, char board[MAX_SIZE][MAX_SIZE], int gridSize) {
+    draw_board(cursorRow, cursorColumn, gridSize, board, true);
+    cout << "Odkryte atomy";
+    return;
+}
 
-    // TODO: remove in final ver 
-    if (board[cursorRow][cursorColumn] == 'O') {
-        cout << "Cursor is on an atom" << endl;
+// laser logic
+void shoot_laser(int& cursorRow, int& cursorColumn, char board[MAX_SIZE][MAX_SIZE], int gridSize) {
+    unsigned size = gridSize + 2;
+    // sprawdzenie czy nie strzelasz z rogu
+    if ((cursorColumn == 1 and cursorRow == 1) or (cursorColumn == size and cursorRow == size) or
+        (cursorColumn == 1 and cursorRow == size) or (cursorColumn == size and cursorRow == 1)) {
+        cout << "====================================" << endl;
+        cout << "|Nie mozesz strzelac z rogu planszy|" << endl;
+        cout << "====================================" << endl;
     }
-    else {
-        cout << "Cursor is on an empty tile" << endl;
+    
+    // sprawdzenie czy nie strzelasz ze środka
+    else if (cursorRow != 1 and cursorRow != size and cursorColumn != 1 and cursorColumn != size){
+        cout << "=======================================" << endl;
+        cout << "|Nie mozesz strzelac ze srodka planszy|" << endl;
+        cout << "=======================================" << endl;
+    }
+    
+    // strzał PIONOWO
+    else if (cursorRow == 1 or cursorRow == size) {
+        for (int i = 0; i < size; i++) {
+            if (board[cursorRow][i] == 'O') {
+                cout << "trafienie" << endl;
+                
+            }
+			
+        }
+
+    }
+
+    // strzał POZIOMO
+    else if (cursorRow == 1 or cursorColumn == gridSize + 2) {
+        cout << "Poziomo" << endl;
     }
 }
 
+// print out cursor postion
+void CursorStatus(int cursorRow, int cursorColumn, char board[MAX_SIZE][MAX_SIZE]) {
+    cout << endl;
+    cout << "Aktualna pozycja kursora - (" << cursorRow << ", " << cursorColumn << ") " << endl;
+}
+
 // controlling user input
-void controls(char input, int& cursorRow, int& cursorColumn, char board[][40], int gridSize) {
+void controls(char input, int& cursorRow, int& cursorColumn, char board[MAX_SIZE][MAX_SIZE], int gridSize) {
     switch (input) {
     case 'w':
         if (cursorRow > 1) {
@@ -159,11 +194,20 @@ void controls(char input, int& cursorRow, int& cursorColumn, char board[][40], i
         }
         break;
     case 'q':
-        
+    case 'Q':
+        exit(0);
         main_menu();
         break;
     case 'h':
-        display_controls();
+    case 'H':
+        hint(cursorRow, cursorColumn, board, gridSize);
+        break;
+    case 'l':
+    case 'L':
+        shoot_laser(cursorRow, cursorColumn, board, gridSize);
+        break;
+    case 'o':
+        board[cursorRow][cursorColumn] = 'X';
         break;
     default:
         break;
@@ -200,7 +244,7 @@ void board_choice() {
         cin >> atoms;
         game(size, atoms);
         cin.ignore();
-        
+
         break;
     default:
         cout << "Nie ma takiej opcji!" << endl;
@@ -218,7 +262,7 @@ void main_menu() {
         << "\n / /_/ / / /_/ / /__/ ,< / /_/ / /_/ />  <"
         << "\n/_____/_/\\__,_/\\___/_/|_/_____/\\____/_/|_|"
         << "\n\nPrzemysław Sadowski | 197696 | EiT1\n\n";
-    
+
     unsigned choice;
     cout << "===== MENU =====" << endl;
     cout << "1. Wybór planszy" << endl;
@@ -248,16 +292,17 @@ void main_menu() {
 // game function
 void game(int gridSize, int numAtoms) {
     // Inital cursor position
-    int cursorRow = 1;   
+    int cursorRow = 1;
     int cursorColumn = 1;
+    bool show_atoms = false;
 
-    char board[40][40] = { 0 }; 
-    
+    char board[MAX_SIZE][MAX_SIZE] = { 0 };
+
     placeAtoms(board, gridSize, numAtoms);
 
-    while (true) {
+    while (!cin.fail()) {
 
-        draw_board(cursorRow, cursorColumn, gridSize, board);
+        draw_board(cursorRow, cursorColumn, gridSize, board, show_atoms);
 
         CursorStatus(cursorRow, cursorColumn, board);
 
@@ -269,43 +314,27 @@ void game(int gridSize, int numAtoms) {
 
 }
 
-// saving game
-void save() {
-    // ...
-}
-
-// loading game (from .txt file ?)
-void load_save() {
-    // ...
-}
-
-// undo move & redo move --> up to 5 moves
+// undo move --> up to 5 moves
 void undo() {
     // ...
 }
 
-// laser logic
-void laser(int& cursorRow, int& cursorColumn, char board, int gridSize) {
-   // LASER LOGIC
-   /*
-   1. laser można wystrzelić tylko z krawędzi planszy
-   2. laser leci w kierunku przeciwnym do krawędzi z której został wystrzelony
-   3. laser odbija się od "krawędzi" atomu a jak trafi na atom to sie zatrzymuje
-   4. pokazać tor lotu lasera (wymazać > narysować nowy przy kolejnym strzale)
-   5. pod pozycją kursora wyświetlać skąd laser wystartował i w jakim miejscu skończył
-   */
+// redo move --> up to 5 moves
+void redo() {
+	// ...
 }
+
 
 // main function
 int main() {
     // allow polish symbols
-    setlocale(LC_CTYPE, "Polish");
+    
     srand(static_cast<unsigned>(time(nullptr)));
 
     do {
         main_menu();
-    } while (1);
-	
+    } while (true);
 
-	return 0;
+
+    return 0;
 }
